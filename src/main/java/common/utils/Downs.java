@@ -6,10 +6,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * @Author: renhongqiang
- * @Date: 2020/12/15 19:14
- **/
 @Slf4j
 public final class Downs {
     /**
