@@ -1,4 +1,4 @@
-package common.utils;
+package common.utils.prettylog;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
