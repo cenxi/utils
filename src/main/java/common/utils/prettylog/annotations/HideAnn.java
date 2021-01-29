@@ -1,4 +1,4 @@
-package common.annotations;
+package common.utils.prettylog.annotations;
 
 import java.lang.annotation.*;
 
