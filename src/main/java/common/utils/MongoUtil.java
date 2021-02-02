@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,7 +25,7 @@ public class MongoUtil {
      * 遍历处理
      */
     public static void iteratorDeal(MongoTemplate mongoTemplate, Criteria filter,
-                             Sort sort, int size, Class<?> clazz, Function func) {
+                                    Sort sort, int size, Class<?> clazz, Function func) {
         Query query = new Query(filter).limit(size).with(sort);
 
         List datas = mongoTemplate.find(query, clazz);
@@ -44,8 +45,10 @@ public class MongoUtil {
 
     private static String getId(Object data, Class<?> clazz) {
         try {
-            Field field = clazz.getDeclaredField("id");
-            field.setAccessible(true);
+            Field field = ReflectionUtils.findField(clazz, "id");
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
             return field.get(data).toString();
         } catch (Exception e) {
             log.error("无id字段", e);
