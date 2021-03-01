@@ -196,4 +196,7 @@ public class IpUtil {
         return new Object[]{host, port};
     }
 
+    public static void main(String[] args) {
+        System.out.printf(getIp());
+    }
 }
