@@ -1,0 +1,27 @@
+##如果配置针对kafka-client 2.0.1(springboot版本2.1.6)
+
+spring.kafka.bootstrap-servers=${KAFKA_BOOTSTRAP_SERVERS:10.231.50.190:9192}
+## Java客户端数据缓冲区大小，如果设置得过小，则数据会不停通过socket发送至kafka服务器，若socket跟不上缓冲区接收数据的速度，则会阻塞Java客户端，影响效率
+spring.kafka.producer.buffer-memory=${KAFKA_PRODUCER_BUFFER_MEMORY:104857700}
+## 消息发送失败重试次数
+spring.kafka.producer.retries=${KAFKA_PRODUCER_RETRIES:2}
+##  producer.batch-size有多层含义
+### 1.数据缓存到了多大量了再发出去
+### 2.设置每条消息最大的大小。（同时需要在kafka服务器的环境变量中配置message.max.bytes=5242880）
+spring.kafka.producer.batch-size=${KAFKA_PRODUCER_BATCH_SIZE:163840}
+#The configuration 'max.request.size' was supplied but isn't a known config
+#spring.kafka.properties.max.request.size=${KAFKA_PRODUCER_MAX_REQUEST_SIZE:20485760}
+### 发送消息最大ack的时间，超过这个时间就会重试再次发送
+spring.kafka.properties.request.timeout.ms=${KAFKA_PRODUCER_REQUEST_TIMEOUT_MS:30000}
+spring.kafka.consumer.group-id=${KAFKA_GROUP_ID:asdkkkfffsda6g}
+spring.kafka.consumer.auto-offset-reset=${AUTO_OFFSET_RESET:earliest}
+spring.kafka.consumer.enable-auto-commit=true
+#spring.kafka.listener.ack-mode=manual
+spring.kafka.consumer.auto-commit-interval=${AUTO_COMMIT_INTERVAL:100}
+# 指定消息key和消息体的编解码方式
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+# 指定消息key和消息体的编解码方式
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.listener.concurrency=${KAFKA_LISTENER_CONCURRENCY:4}
