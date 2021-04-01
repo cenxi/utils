@@ -8,7 +8,11 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.stream.FileImageInputStream;
+import javax.net.ssl.*;
 import java.io.*;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -24,6 +28,52 @@ public class Base64ImageUtil {
             .writeTimeout(10, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
             .build();
+
+    private static final OkHttpClient OK_HTTPS_CLIENT =new OkHttpClient.Builder()
+            .sslSocketFactory(createSSLSocketFactory())
+            .hostnameVerifier(new TrustAllHostnameVerifier())
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .build();
+
+    private static SSLSocketFactory createSSLSocketFactory() {
+        SSLSocketFactory ssfFactory = null;
+
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null,  new TrustManager[] { new TrustAllCerts() }, new SecureRandom());
+
+            ssfFactory = sc.getSocketFactory();
+        } catch (Exception e) {
+        }
+
+        return ssfFactory;
+    }
+
+    private static class TrustAllHostnameVerifier implements HostnameVerifier {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+	        return true;
+        }
+    }
+
+    private static class TrustAllCerts implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+    }
+
 
     public static boolean isBase64(String str) {
         return Pattern.matches(baes64Pattern, str);
@@ -202,6 +252,28 @@ public class Base64ImageUtil {
         Response response = null;
         try {
             response = OK_HTTP_CLIENT.newCall(request).execute();
+            if (response.isSuccessful()) {
+                return response.body().bytes();
+            } else {
+                log.error("图片下载失败,picUrl->{}", picUrl);
+                return null;
+            }
+        } catch (IOException e) {
+            log.error("图片下载异常,picUrl->" + picUrl, e);
+            return null;
+        } finally {
+            if (!Objects.isNull(response)) {
+                response.close();
+            }
+        }
+    }
+
+    public static byte[] getBytesByHttpsImgUrl(String picUrl) {
+        Request.Builder builder = new Request.Builder().url(picUrl);
+        Request request = builder.build();
+        Response response = null;
+        try {
+            response = OK_HTTPS_CLIENT.newCall(request).execute();
             if (response.isSuccessful()) {
                 return response.body().bytes();
             } else {
