@@ -1,8 +1,8 @@
 package common.utils.todoc;
 
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
 import com.lowagie.text.rtf.RtfWriter2;
-import com.megvii.galaxy.analysis.offline.response.OfflineTaskResponse;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Service;
 
@@ -31,14 +31,14 @@ public class TableToWordUtil {
     private static String path = "/Users/fengxi/Desktop/demo";
 
     public static void main(String[] args) {
-        Class[] classes={OfflineTaskResponse.class};
+        Class[] classes={Response.class};
 
-        List<List<com.megvii.sng.insight.openapi.todoc.TableFiled>> tableFiledList = new ArrayList<>();
+        List<List<TableFiled>> tableFiledList = new ArrayList<>();
         for (Class clazz : classes) {
             Field[] fields = clazz.getDeclaredFields();
-            List<com.megvii.sng.insight.openapi.todoc.TableFiled> tableFileds = new ArrayList<>();
+            List<TableFiled> tableFileds = new ArrayList<>();
             for (Field field : fields) {
-                com.megvii.sng.insight.openapi.todoc.TableFiled tableFiled = new com.megvii.sng.insight.openapi.todoc.TableFiled();
+                TableFiled tableFiled = new TableFiled();
                 tableFiled.setCatagory(clazz.getName());
                 ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
                 if (apiModelProperty != null) {
@@ -65,7 +65,7 @@ public class TableToWordUtil {
      * @param title:文件内容标题
      * @return: void
      */
-    public void toWord(List<com.megvii.sng.insight.openapi.todoc.TableFiled> fileds, String fileName, String title, int no) {
+    public void toWord(List<TableFiled> fileds, String fileName, String title, int no) {
         Document document = new Document(PageSize.A4);
         try {
             // 创建文件夹
@@ -91,7 +91,7 @@ public class TableToWordUtil {
             String all = "" + (no + 1) + " 表名称:" + fileds.get(0).getCatagory();
             Table table = new Table(3);
             for (int i = 0; i < 1; i++) {
-                com.megvii.sng.insight.openapi.todoc.TableFiled filed = fileds.get(i);
+                TableFiled filed = fileds.get(i);
 
 
 //                document.add(new Paragraph(""));
