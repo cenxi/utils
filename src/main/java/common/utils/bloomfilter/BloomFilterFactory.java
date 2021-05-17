@@ -20,7 +20,7 @@ public class BloomFilterFactory {
      * @param <E>
      * @return
      */
-    public <E> BloomFilter<E> createBloomFilter(BloomFilterConfig config, double falsePositiveProbability, int expectedNumberOfElements) {
+    public static  <E> BloomFilter<E> createBloomFilter(BloomFilterConfig config, double falsePositiveProbability, int expectedNumberOfElements) {
         BloomFilter<E> filter = new BloomFilter<>(0.0001, 1000 * 1000);
         Config redissonConfig = new Config();
         redissonConfig.useSingleServer()

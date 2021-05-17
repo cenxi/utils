@@ -1,4 +1,6 @@
 import common.utils.bloomfilter.BloomFilter;
+import common.utils.bloomfilter.BloomFilterConfig;
+import common.utils.bloomfilter.BloomFilterFactory;
 import common.utils.bloomfilter.RedissonBitSet;
 import org.junit.Test;
 import org.redisson.Redisson;
@@ -21,6 +23,16 @@ public class BloomFilterTest {
         String redisPassword = "123456";
         Integer db=5;
         BloomFilter<String> bloomFilter = constructFilter(redisHost, redisPort, redisPassword, db);
+    }
+
+    @Test
+    public void testBloomFilter1(){
+        BloomFilterConfig bloomFilterConfig = new BloomFilterConfig("127.0.0.1", 6379, 10, "123456");
+        BloomFilter<String> filter = BloomFilterFactory.createBloomFilter(bloomFilterConfig, 0.0001, 1000 * 1000);
+
+        String testStr = "aaa";
+        filter.add(testStr);
+        filter.contains(testStr);
     }
 
     private BloomFilter<String> constructFilter(String redisHost,Integer redisPort,String redisPassword,Integer db) {
