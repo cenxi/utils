@@ -1,6 +1,8 @@
 **/.idea/**
 **/.idea
 .idea/**
+.gradle/**
+.gradle
 **/target
 /video/*
 */*.iml
