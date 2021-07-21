@@ -24,6 +24,7 @@ if [ $tot_s -ne $tot_u ];then
     exit
 fi
 
+"$@"
 i=0
 while [ $i -lt $tot_u ];do
     (ssh ${user[$i]}@${server[$i]} "$@" & )  2>> ./log.txt
