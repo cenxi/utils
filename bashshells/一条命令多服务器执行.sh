@@ -26,7 +26,7 @@ fi
 
 i=0
 while [ $i -lt $tot_u ];do
-    (ssh ${user[$i]}@${server[$i]} "$1" & )  2>> ./log.txt
+    (ssh ${user[$i]}@${server[$i]} "$@" & )  2>> ./log.txt
     #注意一定要在最后面加&符号，否则就是串行执行，不能体现并行。
     #将错误重定向到日志文件中
 
