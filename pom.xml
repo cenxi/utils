@@ -129,7 +129,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.2.0</version>
+            <version>3.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -142,6 +142,12 @@
             <version>5.1.48</version>
         </dependency>
         <!-- mybatisplus generator  end -->
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.6.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
