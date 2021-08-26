@@ -126,7 +126,4 @@ public class WrapperUtils {
 
     }
 
-    public static void main(String[] args) {
-        System.out.println(String.class.isPrimitive());
-    }
 }
