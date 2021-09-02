@@ -57,6 +57,9 @@ public class WrapperUtils {
                 queryField.setKey(query.value());
                 queryField.setField(field);
                 for (TableFieldInfo tableField : tableFields) {
+                    if ("id".equalsIgnoreCase(field.getName())) {
+                        queryField.setTableFieldName("id");
+                    }
                     if (tableField.getProperty().equalsIgnoreCase(field.getName())) {
                         queryField.setTableFieldName(tableField.getColumn());
                     }
@@ -65,9 +68,17 @@ public class WrapperUtils {
             }
 
             cache.put(obj.getClass(), queryFields);
-        }
+    }
 
         for (QueryField queryField : queryFields) {
+            /**
+             * 升序、降序，不关心字段的值
+             */
+            if (queryField.key == SqlKeyword.ASC
+                    || queryField.key == SqlKeyword.DESC) {
+                buildQueryWrapper(queryWrapper, null
+                        , queryField.getKey(), queryField.getTableFieldName());
+            }
             Object fieldVal = ReflectUtil.getFieldValue(obj, queryField.getField());
             if (fieldVal == null || StringUtils.isEmpty(fieldVal.toString())) {
                 // 传入的字段为空，则不做处理
@@ -85,8 +96,10 @@ public class WrapperUtils {
         switch (key) {
             case DESC:
                 queryWrapper.orderByDesc(tableFieldName);
+                break;
             case ASC:
                 queryWrapper.orderByAsc(tableFieldName);
+                break;
             case ORDER_BY:
                 if (!(fieldVal instanceof Boolean)) {
                     throw new RuntimeException("使用ORDER_BY类型,属性只能是boolean类型(true代表降序,false代表升序)");
@@ -97,6 +110,7 @@ public class WrapperUtils {
                 } else {
                     queryWrapper.orderByAsc(tableFieldName);
                 }
+                break;
             case EQ:
                 queryWrapper.eq(tableFieldName, fieldVal);
                 break;
@@ -108,10 +122,13 @@ public class WrapperUtils {
                 break;
             case NE:
                 queryWrapper.ne(tableFieldName, fieldVal);
+                break;
             case IS_NOT_NULL:
                 queryWrapper.isNotNull(tableFieldName);
+                break;
             case IS_NULL:
                 queryWrapper.isNull(tableFieldName);
+                break;
         }
     }
 
@@ -126,4 +143,7 @@ public class WrapperUtils {
 
     }
 
+    public static void main(String[] args) {
+        System.out.println(String.class.isPrimitive());
+    }
 }
