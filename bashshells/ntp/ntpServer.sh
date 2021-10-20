@@ -6,7 +6,7 @@ fi
 
 \cp -f /etc/ntp.conf /etc/ntp.conf.bak
 
-cat>>/etc/ntp.conf<<EOF
+cat>/etc/ntp.conf<<EOF
 driftfile /var/lib/ntp/drift
 
 restrict default nomodify notrap nopeer noquery
