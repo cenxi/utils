@@ -11,5 +11,8 @@ $ repotrack ansible
 $ yumdownloader --resolve --destdir=/tmp ansible
 
 
-# 安装rpm包
+# 离线安装
+# -U升级
+$ rpm -Uvh --force --nodeps *.rpm
+# 安装rpm包(可能安装不成功)
 $ yum -y localinstall /opt/*.rpm --skip-broken
