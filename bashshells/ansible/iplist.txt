@@ -1,0 +1,6 @@
+ip:
+{% for h in groups['all'] %}
+  {{loop.index0}}:
+    host: {{ hostvars[h].inventory_hostname }}
+    port: {{ hostvars[h].ansible_ssh_port }}
+{% endfor %}

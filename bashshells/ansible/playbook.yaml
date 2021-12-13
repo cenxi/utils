@@ -1,0 +1,263 @@
+## 样例学习
+- hosts: localhost
+  connection: local
+  tasks:
+  ##利用stat判断安装包是否存在，不存在则退出
+    - name: check /opt/ai_deploy/packages/images/images.tar.gz
+      stat:
+        path: /opt/ai_deploy/packages/images/images.tar.gz
+      register: images_status
+      failed_when: images_status.stat.exists == False
+#    - name: create deploy template
+#      template:
+#        src: /root/iplist.txt
+#        dest: /tmp/iplist.txt
+#    - include_vars: /tmp/iplist.txt
+#    - debug: var=ip
+#    - name: check /etc/hosts.bak exists
+#      stat:
+#        path: /etc/hosts.bak
+#      register: host_stat
+#    - name: debug
+#      debug:
+#        msg: "{{host_stat}}"
+#    - name: backup /etc/hosts
+#      command: cp /etc/hosts /etc/hosts.bak
+#      when: host_stat.stat.exists == False
+- hosts: all
+  pre_tasks:
+    # 判断hosts文件配置的host是否都能连得上，连不上则退出
+    - name: Check ALL hosts are reacheable before doing the release
+      assert:
+        that:
+          - ansible_play_hosts == groups.all
+        fail_msg: 1 or more host is UNREACHABLE
+        success_msg: ALL hosts are REACHABLE, go on
+      run_once: yes
+  tasks:
+  # 利用模板，得到所有机器的ip列表
+    - name: create deploy template
+      template:
+        src: /opt/ai_deploy/iplist.txt
+        dest: /tmp/iplist.txt
+    - include_vars: /tmp/iplist.txt
+    - debug:
+        msg: "{{ip}}"
+#    - name: create file
+#      copy:
+#        src: /opt/ai_deploy
+#        dest: /opt/ansible-test
+    # 配置root用户免密登录
+    - name: generate known hosts
+      command: 'ssh-keyscan -p {{ item.value.port }} -t ecdsa-sha2-nistp256 {{ item.value.host }}'
+      register: keyscan
+      with_dict: "{{ip}}"
+      run_once: true
+    - name: debug keyscan
+      debug:
+        msg: "{{item.stdout_lines}}"
+      with_items: '{{ keyscan.results }}'
+      run_once: true
+    - name: gen ssh_keypair
+      openssh_keypair:
+        path: /root/.ssh/id_rsa
+        size: 2048
+        type: rsa
+      connection: local
+      run_once: true
+    - name: local ssh-keyscan command
+      lineinfile:
+        create: yes
+        path: /home/rancher/.ssh/known_hosts
+        line: "{{item.stdout_lines[0]}}"
+      with_items: '{{ keyscan.results }}'
+      run_once: true
+      connection: local
+    - name: install ssh key
+      authorized_key:
+        user: root
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+        state: present
+    - name: indexed loop demo
+      debug: msg="User {{ item.key }} is {{ item.value.host }} ({{ item.value.port }})"
+      with_dict: "{{ip}}"
+      run_once: true
+#    - name: rm dir
+#      shell: rm -rf /opt/ansible-test/ai_deploy;touch /tmp/aa
+    # 写hosts文件
+    - name: write /etc/hosts empty
+      lineinfile:
+        regexp: .*{{item.value.host}}.*
+        path: /etc/hosts
+        line: ""
+      with_dict: "{{ip}}"
+    - name: write /etc/hosts
+      lineinfile:
+        regexp: .*rancher{{item.key}}.*
+        path: /etc/hosts
+        line: "{{item.value.host}}  rancher{{item.key}}"
+      with_dict: "{{ip}}"
+    - name: "write /etc/hosts registry.xxx"
+      lineinfile:
+        regexp: .*registry\.xxx.*
+        path: /etc/hosts
+        line: "{{ip[0].host}}  registry.xxx"
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: /tmp/iplist.txt
+    - name: scp file
+      shell: scp -P {{ item.value.port }} -r /opt/ai_deploy root@{{item.value.host}}:/opt
+      with_dict: "{{ip}}"
+      ignore_errors: True
+- hosts: all
+  tasks:
+    - name: sh ai_prepare.sh cpu
+      shell: "sh /opt/ai_deploy/ai_prepare.sh cpu"
+      async: 0
+      poll: 3
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: /tmp/iplist.txt
+    - name: check docker install success
+      shell: ssh root@{{item.value.host}} -p {{ item.value.port }} "which docker"
+      with_dict: "{{ip}}"
+    - name: check openebs iscsid install success
+      shell: ssh root@{{item.value.host}} -p {{ item.value.port }} "which iscsid"
+      with_dict: "{{ip}}"
+    - name: check nfs install success
+      shell: ssh root@{{ip[0].host}} -p {{ip[0].port}} "which nfsstat"
+- hosts: all
+  vars:
+    password: xxx_123
+  tasks:
+    - include_vars: /tmp/iplist.txt
+    - name: check images exists and load
+      shell: sh /opt/ai_deploy/load_image.sh
+      async: 0
+      poll: 3
+    # 创建非root用户
+    - name: create rancher user
+#      shell: sh /opt/ai_deploy/base/rancher/create_user.sh
+      user:
+        name: rancher
+        group: docker
+        password: "{{ password | password_hash('sha512') }}"
+    # 配置非root用户免密登录
+    - name: mkdir .ssh
+      file:
+        path: /home/rancher/.ssh
+        state: directory
+        mode: 0700
+      become_user: rancher
+      become_method: su
+      become: yes
+      ignore_errors: True
+    - name: gen rancher ssh_keypair
+      openssh_keypair:
+        path: /home/rancher/.ssh/id_rsa
+        size: 2048
+        type: rsa
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+      become_user: rancher
+      become_method: su
+      become: yes
+    - name: generate known hosts
+      command: 'ssh-keyscan -p {{ item.value.port }} -t ecdsa-sha2-nistp256 {{ item.value.host }}'
+      register: keyscan
+      with_dict: "{{ip}}"
+      run_once: true
+    - name: debug keyscan
+      debug:
+        msg: "{{item.stdout_lines}}"
+      with_items: '{{ keyscan.results }}'
+      run_once: true
+#    - name: debug
+#      debug:
+#        msg: "{{ ansible_env.HOME }}"
+#      become_user: rancher
+#      become_method: su
+#      become: yes
+    - name: ssh-keyscan command
+      lineinfile:
+        create: yes
+        path: /home/rancher/.ssh/known_hosts
+        line: "{{item.stdout_lines[0]}}"
+      with_items: '{{ keyscan.results }}'
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: get rancher0 id_rsa.pub
+      command: "cat /home/rancher/.ssh/id_rsa.pub"
+      register: ran_pub
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: install rancher ssh key
+      authorized_key:
+        user: rancher
+        key: "{{ran_pub.stdout}}"
+        state: present
+    - name: rancher-cluster.yaml template
+      template:
+        src: /opt/ai_deploy/base/rancher/rancher-cluster-tmp.j2
+        dest: /home/rancher/rancher-cluster.yaml
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+#    - name: install rancher ssh key
+#      authorized_key:
+#        user: rancher
+#        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+#        state: present
+    - name: rke up --config /home/rancher/rancher-cluster.yaml
+      shell: rke up --config /home/rancher/rancher-cluster.yaml
+      become_user: rancher
+      become_method: su
+      become: yes
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: create /root/.kube
+      file:
+        path: /root/.kube
+        state: directory
+        mode: 0777
+    - name: create /home/rancher/.kube
+      file:
+        path: /home/rancher/.kube
+        state: directory
+        mode: 0777
+    - name: kube_config_rancher-cluster.yaml  777
+      file:
+        path: /home/rancher/kube_config_rancher-cluster.yaml
+        mode: 0777
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: rancher-cluster.rkestate  777
+      file:
+        path: /home/rancher/rancher-cluster.rkestate
+        mode: 0777
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: scp file kube_config_rancher-cluster.yaml
+      shell: scp -P {{ item.value.port }} /home/rancher/kube_config_rancher-cluster.yaml rancher@{{item.value.host}}:/home/rancher/.kube/config
+      with_dict: "{{ip}}"
+      become_user: rancher
+      become_method: su
+      become: yes
+      delegate_to: "{{ip[0].host}}"
+      run_once: true
+    - name: scp file kube_config_rancher-cluster.yaml
+      shell: scp -P {{ item.value.port }} /home/rancher/.kube/config root@{{item.value.host}}:/root/.kube/config
+      with_dict: "{{ip}}"
+      connection: local
+      run_once: true
+    - name: install openebs nfs kuboard harbor
+      shell: sh /opt/ai_deploy/ai_deploy.sh
+      connection: local
+      run_once: true
+#- hosts: localhost
+#  connection: local
+#  tasks:
+#    - include_vars: /tmp/iplist.txt
+#    - name: rke up --config /home/rancher/rancher-cluster.yaml
+#      shell: ssh rancher@{{ip[0].host}} -p {{ip[0].port}} "rke up --config /home/rancher/rancher-cluster.yaml"
