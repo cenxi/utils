@@ -68,18 +68,16 @@ public class WrapperUtils {
             }
 
             cache.put(obj.getClass(), queryFields);
-    }
+        }
 
         for (QueryField queryField : queryFields) {
-            /**
-             * 升序、降序，不关心字段的值
-             */
+            Object fieldVal = ReflectUtil.getFieldValue(obj, queryField.getField());
             if (queryField.key == SqlKeyword.ASC
-                    || queryField.key == SqlKeyword.DESC) {
-                buildQueryWrapper(queryWrapper, null
+                    || queryField.key == SqlKeyword.DESC
+                    || queryField.key == SqlKeyword.ORDER_BY) {
+                buildQueryWrapper(queryWrapper, fieldVal
                         , queryField.getKey(), queryField.getTableFieldName());
             }
-            Object fieldVal = ReflectUtil.getFieldValue(obj, queryField.getField());
             if (fieldVal == null || StringUtils.isEmpty(fieldVal.toString())) {
                 // 传入的字段为空，则不做处理
                 continue;
@@ -129,6 +127,7 @@ public class WrapperUtils {
             case IS_NULL:
                 queryWrapper.isNull(tableFieldName);
                 break;
+            default:
         }
     }
 
@@ -141,9 +140,5 @@ public class WrapperUtils {
 
         private String tableFieldName;
 
-    }
-
-    public static void main(String[] args) {
-        System.out.println(String.class.isPrimitive());
     }
 }
