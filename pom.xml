@@ -15,6 +15,7 @@
         <commons.lang.version>3.4</commons.lang.version>
         <redission.version>3.10.6</redission.version>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <caffeine.version>3.0.0</caffeine.version>
     </properties>
     <dependencies>
         <dependency>
@@ -147,6 +148,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
         </dependency>
     </dependencies>
 
