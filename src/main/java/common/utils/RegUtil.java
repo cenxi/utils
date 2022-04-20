@@ -24,6 +24,7 @@ public class RegUtil {
         while (matcher.find()) {
             nums.add(matcher.group());
         }
+
         return nums;
     }
 
