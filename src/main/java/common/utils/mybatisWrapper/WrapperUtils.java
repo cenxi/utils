@@ -46,21 +46,24 @@ public class WrapperUtils {
             // 反射获取类相关信息，并加到缓存当中
             Field[] fields = ReflectUtil.getFields(obj.getClass());
             if (ArrayUtil.isEmpty(fields)) {
-                throw new RuntimeException(obj.getClass().toString() + "->不存在任何属性");
+                return queryWrapper;
             }
             for (Field field : fields) {
                 Query query = field.getAnnotation(Query.class);
                 if (query == null) {
                     continue;
                 }
+                String propName = query.propName();
                 QueryField queryField = new QueryField();
                 queryField.setKey(query.value());
                 queryField.setField(field);
+
+                String columnName = isBlank(propName) ? field.getName() : propName;
                 for (TableFieldInfo tableField : tableFields) {
-                    if ("id".equalsIgnoreCase(field.getName())) {
+                    if ("id".equalsIgnoreCase(columnName)) {
                         queryField.setTableFieldName("id");
                     }
-                    if (tableField.getProperty().equalsIgnoreCase(field.getName())) {
+                    if (tableField.getProperty().equalsIgnoreCase(columnName)) {
                         queryField.setTableFieldName(tableField.getColumn());
                     }
                 }
@@ -140,5 +143,18 @@ public class WrapperUtils {
 
         private String tableFieldName;
 
+    }
+
+    private static boolean isBlank(final CharSequence cs) {
+        int strLen;
+        if (cs == null || (strLen = cs.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

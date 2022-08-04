@@ -16,4 +16,7 @@ public @interface Query {
 
     SqlKeyword value() default SqlKeyword.EQ;
 
+    //  基本对象的属性名
+    String propName() default "";
+
 }
