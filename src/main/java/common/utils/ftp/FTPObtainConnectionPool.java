@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 /**
  * 获取ftp数据连接池
  *
- * @author sunzhengyu
- * @create 2018-12-26 10:36
  **/
 @Component("FTPObtainConnectionPool")
 @Lazy

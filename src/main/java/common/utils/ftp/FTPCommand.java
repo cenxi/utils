@@ -26,8 +26,6 @@ import java.util.*;
  * ftp命令控制类
  * </p>
  *
- * @author zhouxinke
- * @date 2018年1月19日 上午11:51:41
  * @see
  */
 @Component("ftpCommand")

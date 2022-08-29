@@ -15,10 +15,6 @@ import org.slf4j.LoggerFactory;
  * FTP连接工厂
  * </p>
  * 
- * @author zhouxinke
- * @date 2018年1月15日 下午5:03:27
- * @see
- *
  */
 public abstract class FTPConnectionFactory implements PooledObjectFactory<FTPClient> {
   private Logger logger = LoggerFactory.getLogger(FTPConnectionFactory.class);
