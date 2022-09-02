@@ -382,7 +382,7 @@ public class FTPCommand {
                 log.info("fileUploadSuccess do while ing...len2 {}", len2);
                 len1 = len2;
                 // 线程休息1s
-                Thread.sleep(100);
+                Thread.sleep(1000);
                 mdtmFile = mlistFileCommand(remoteFilePath);
                 if (mdtmFile == null) {
                     Thread.sleep(1000);
