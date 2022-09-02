@@ -426,16 +426,4 @@ public class FTPCommand {
         return null;
     }
 
-    int i = 0;
-
-    public String test2(String path) {
-        ++i;
-        if (i < 5) {
-            throw new RuntimeException("ftp测试异常");
-        }
-        log.info(path);
-        return "success";
-
-    }
-
 }
