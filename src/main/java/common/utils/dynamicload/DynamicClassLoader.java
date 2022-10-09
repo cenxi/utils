@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * 自定义动态类加载器
+ * 新方式:使用groovyClassLoader，由于它每次加载类会使用一个新的类加载器，所以支持类修改之后的热加载
  * @author rongdi
  * @date 2021-01-06
  */
