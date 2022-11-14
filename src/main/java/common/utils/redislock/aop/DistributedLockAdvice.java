@@ -17,11 +17,6 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author dangzerong
- * @Description redisson分布式锁注解方式
- * @CreateTime 2021/08/12 13:30
- */
 @Slf4j
 @Aspect
 @Component

@@ -2,11 +2,6 @@ package common.utils.redislock.anno;
 
 import java.lang.annotation.*;
 
-/**
- * @author dangzerong
- * @Description 分布式锁注解
- * @CreateTime 2021/08/12 14:35
- */
 @Inherited
 @Documented
 @Target({ElementType.METHOD})
