@@ -18,5 +18,11 @@ public @interface DistributedLock {
      * 锁最大等待时间
      * @return 最大等待时间
      */
-    long maxSleepTime() default 30L;
+    long waitTime() default 30L;
+
+    /**
+     * 锁过期时间，避免程序崩溃，锁一直没释放
+     * @return
+     */
+    long leaseTime() default 30L;
 }

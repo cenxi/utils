@@ -66,11 +66,12 @@ public class DistributedLockAdvice {
         log.info("分布式锁拦截,方法:{},参数:{}", methodName, arguments);
         DistributedLock annotation = method.getAnnotation(DistributedLock.class);
         String prefix = annotation.prefix();
-        long maxSleepTime = annotation.maxSleepTime();
+        long waitTime = annotation.waitTime();
+        long leaseTime = annotation.leaseTime();
         Object result;
         String lockKey = this.getMsiLockKey(prefix, methodName);
         RLock rLock = redissonClient.getLock(lockKey);
-        if (rLock.tryLock(maxSleepTime, TIME_UNIT)) {
+        if (rLock.tryLock(waitTime,leaseTime, TIME_UNIT)) {
             log.info("加锁成功:{}", lockKey);
             try {
                 result = pjp.proceed();
