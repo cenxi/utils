@@ -183,6 +183,11 @@
         </dependency>
         <!-- 基于redis分布式锁 END-->
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
