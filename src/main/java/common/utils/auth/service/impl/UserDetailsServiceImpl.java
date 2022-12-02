@@ -1,10 +1,9 @@
 package common.utils.auth.service.impl;
 
-import common.utils.auth.security.bean.LoginProperties;
 import common.utils.auth.entity.dto.JwtUserDto;
 import common.utils.auth.entity.dto.UserDto;
-import common.utils.auth.entity.model.CcSysUser;
-import common.utils.auth.service.CcSysUserService;
+import common.utils.auth.security.bean.LoginProperties;
+import common.utils.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,14 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author zb
- * @date 2019 -11-22
- */
 @RequiredArgsConstructor
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final CcSysUserService ccSysUserService;
+    private final UserService userService;
     private final LoginProperties loginProperties;
 
     public void setEnableCache(boolean enableCache) {
@@ -47,12 +42,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             searchDb = false;
         }
         if (searchDb) {
-            UserDto user;
-            CcSysUser ccSysUser = ccSysUserService.findByName(username);
-            if (ccSysUser == null) {
+            UserDto user = userService.findByName(username);
+            if (user == null) {
                 throw new UsernameNotFoundException("");
             } else {
-                user = ccSysUser.toUserDto();
                 if (user == null) {
                     throw new UsernameNotFoundException("");
                 } else {

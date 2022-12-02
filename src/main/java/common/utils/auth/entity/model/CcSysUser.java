@@ -74,11 +74,4 @@ public class CcSysUser {
         return Objects.hash(user_id, username);
     }
 
-    public UserDto toUserDto() {
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(this, userDto);
-
-        return userDto;
-    }
-
 }

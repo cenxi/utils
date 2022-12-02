@@ -7,41 +7,14 @@ import lombok.Setter;
 
 import java.util.Date;
 
-/**
- * @author zb
- * @date 2019-11-23
- */
-@Getter
-@Setter
-public class UserDto {
+public interface  UserDto {
 
-    private Long id;
-
-    private Long deptId;
-
-    private String username;
-
-    private String nickName;
-
-    private String email;
-
-    private String phone;
-
-    private String gender;
-
-    private String avatarName;
-
-    private String avatarPath;
+    String getUsername();
 
     @JsonIgnore
     @JSONField(serialize = false)
-    private String password;
+    String getPassword();
 
-    private Boolean enabled;
+    Boolean getEnabled();
 
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private Boolean isAdmin = false;
-
-    private Date pwdResetTime;
 }

@@ -21,24 +21,9 @@ public class OnlineUserDto {
     private String userName;
 
     /**
-     * 昵称
-     */
-    private String nickName;
-
-    /**
-     * 浏览器
-     */
-    private String browser;
-
-    /**
      * IP
      */
     private String ip;
-
-    /**
-     * 地址
-     */
-    private String address;
 
     /**
      * token

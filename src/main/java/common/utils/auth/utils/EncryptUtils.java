@@ -7,12 +7,6 @@ import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 加密
- * @author zb
- * @date 2019 -11-23
- */
-
 public class EncryptUtils {
 
     private static final String STR_PARAM = "Passw0rd";
