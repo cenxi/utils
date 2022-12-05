@@ -12,4 +12,6 @@ import common.utils.auth.entity.model.CcSysUser;
 public interface UserService {
 
     UserDto findByName(String name);
+
+    void updatePass(String username,String pwd);
 }
