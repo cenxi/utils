@@ -1,0 +1,30 @@
+spring:
+  redis:
+    timeout: 6000ms
+    database: 0
+    host: 127.0.0.7
+    lettuce:
+      pool:
+       max-active: 1000 #连接池最大连接数（使用负值表示没有限制）
+       max-idle: 10 #连接池中的最大空闲连接
+       min-idle: 3 #连接池中的最小空闲连接
+       max-wait: -1 #连接池最大阻塞等待时间（使用负值表示没有限制）
+jwt:
+# 登录相关配置
+   header: de-token
+# 登录缓存
+   token-start-with: Bearer
+#  是否限制单用户登录
+   base64-secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
+#  验证码
+   token-validity-in-seconds: 14400000
+#  验证码类型配置 查看 LoginProperties 类
+   online-key: online-token-
+#  登录图形验证码有效时间/分钟
+   code-key: code-key-
+#  验证码高度
+   detect: 1800000
+#  验证码宽度
+   renew: 3600000
+rsa:
+   private_key: MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEAqRtyExY+osR2grQAD8tLTQJFE+e2DMT8+yB+vQ/pdCr1jrR+A5u+C7qenZxd8AcKk6I+8LnX+V7ZekhVwa/yEwIDAQABAkB5jJKoCXsn/1K3i63nrFYJmjIQpqIB961my+qM9lz086i8pzTJPN4o/MtWqMH8nxFguop4io687G+g1eZiwjpxAiEA0zeGtF6nl8FTUxxOwc8s3XIayjorr6NESVennsOYW/UCIQDM9kf2qWlzxDKOaEr3FZjUzILthzb6+34Woi3l2H4Y5wIgS2H/45P8wH6xHHJ38VfdrVMyGIbWXKMqlfqAynsIf5kCIBmQRh1/t8VWnS+h1mfG687uyw2xJaxcHbfY9nyKaf/VAiBUoSHM7/nWVbnsYRw8AndUlq3VgPfXowvab7sUY/gaJw==

@@ -1,3 +1,4 @@
+import common.utils.App;
 import common.utils.RegUtil;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @date 2022年11月15日 16:17
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RegUtil.class)
+@SpringBootTest(classes = App.class)
 public class BaseTest {
 }

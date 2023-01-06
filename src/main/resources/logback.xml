@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <contextName>data-src</contextName>
+    <contextName>utils</contextName>
 
     <property name="LOG_HOME" value="logs/data-src" />
 

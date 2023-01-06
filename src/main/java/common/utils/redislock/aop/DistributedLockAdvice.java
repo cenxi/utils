@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Aspect
-@Component
+//@Component
 public class DistributedLockAdvice {
 
     private static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
