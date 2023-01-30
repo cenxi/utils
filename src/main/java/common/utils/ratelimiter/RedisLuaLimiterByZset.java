@@ -14,6 +14,12 @@ import java.util.Arrays;
 /**
  * 基于滑动窗口法限制，优点：解决了固定窗口算法在时间临界处，流量超过阙值的情况
  * 基于reids的zset实现
+ * 限流算法（参考:https://www.cnblogs.com/niumoo/p/16007224.html）
+ *   1.漏桶法(缺点:突发的大流量只能拒绝)
+ *   2.令牌桶法(优点:可以应对突发大流量的情况)
+ *   3.固定窗口法
+ *   4.滑动窗口法
+ *   5.滑动日志法
  * @author fengxi
  * @className RedisLuaLimiterByZset
  * @description
@@ -32,7 +38,9 @@ public class RedisLuaLimiterByZset {
         long now = System.currentTimeMillis();
         key = KEY_PREFIX + key;
         String oldest = String.valueOf(now - 1_000);
+        // 时间作为分数，利用zset排序
         String score = String.valueOf(now);
+        // 每个请求生成一个唯一ID
         String scoreValue = snowflake.nextIdStr();
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setResultType(Long.class);
