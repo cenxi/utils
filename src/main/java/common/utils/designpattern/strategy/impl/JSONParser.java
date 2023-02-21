@@ -1,6 +1,6 @@
-package common.utils.factorybean.impl;
+package common.utils.designpattern.strategy.impl;
 
-import common.utils.factorybean.Parser;
+import common.utils.designpattern.strategy.Parser;
 import org.springframework.stereotype.Service;
 
 import java.io.Reader;

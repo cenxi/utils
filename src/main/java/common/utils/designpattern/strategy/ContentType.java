@@ -1,4 +1,4 @@
-package common.utils.factorybean;
+package common.utils.designpattern.strategy;
 
 /**
  * @author fengxi

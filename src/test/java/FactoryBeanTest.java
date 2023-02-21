@@ -1,5 +1,5 @@
-import common.utils.factorybean.ContentType;
-import common.utils.factorybean.ParserClient;
+import common.utils.designpattern.strategy.ContentType;
+import common.utils.designpattern.strategy.ParserClient;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

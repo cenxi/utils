@@ -1,4 +1,4 @@
-package common.utils.factorybean;
+package common.utils.designpattern.strategy;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;

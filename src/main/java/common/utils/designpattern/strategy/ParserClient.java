@@ -1,4 +1,4 @@
-package common.utils.factorybean;
+package common.utils.designpattern.strategy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
