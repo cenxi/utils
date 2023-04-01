@@ -1,54 +1,9 @@
-<mxfile host="app.diagrams.net" modified="2022-02-22T06:07:10.717Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36" etag="3NnrLQxsaViEVVW6ue_r" version="16.5.6" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-01T09:09:29.029Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="ibcgBPbRbnlSakVneYDI" version="21.1.2" type="github">
   <diagram id="Za0V6DKtKcFsV4YseQ1D" name="Page-1">
-    <mxGraphModel dx="1422" dy="806" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="808" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="ggjl93eLX9xhSivgfc8k-3" value="系统字典表" style="swimlane;fillColor=#21C0A5;strokeColor=#006658;fontColor=#5C5C5C;" vertex="1" parent="1">
-          <mxGeometry x="170" y="370" width="200" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-4" value="第三方字典映射表" style="swimlane;fillColor=#21C0A5;strokeColor=#006658;fontColor=#5C5C5C;" vertex="1" parent="1">
-          <mxGeometry x="430" y="370" width="200" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#006658;fontColor=#5C5C5C;exitX=0.217;exitY=1.017;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="ggjl93eLX9xhSivgfc8k-14" target="ggjl93eLX9xhSivgfc8k-3">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="269.81999999999994" y="270" as="sourcePoint" />
-            <mxPoint x="310" y="310" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-7" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#006658;fontColor=#5C5C5C;exitX=0.785;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="ggjl93eLX9xhSivgfc8k-14" target="ggjl93eLX9xhSivgfc8k-4">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="530" y="270" as="sourcePoint" />
-            <mxPoint x="529.45" y="269.99999999999994" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-8" value="查询数据" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;sketch=0;fontColor=#5C5C5C;" vertex="1" parent="1">
-          <mxGeometry x="240" y="300" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-9" value="查询数据" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;sketch=0;fontColor=#5C5C5C;" vertex="1" parent="1">
-          <mxGeometry x="500" y="300" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-14" value="缓存服务" style="rounded=0;whiteSpace=wrap;html=1;sketch=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
-          <mxGeometry x="170" y="200" width="460" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-15" value="对外接口服务(工具类+controller)" style="rounded=0;whiteSpace=wrap;html=1;sketch=0;strokeColor=#6c8ebf;fillColor=#dae8fc;" vertex="1" parent="1">
-          <mxGeometry x="170" y="140" width="460" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-17" value="" style="endArrow=classic;html=1;rounded=1;sketch=0;fontColor=#5C5C5C;strokeColor=#006658;fillColor=#21C0A5;exitX=0;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="ggjl93eLX9xhSivgfc8k-14">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="120" y="270" as="sourcePoint" />
-            <mxPoint x="171" y="220" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="170" y="250" />
-              <mxPoint x="120" y="250" />
-              <mxPoint x="120" y="220" />
-              <mxPoint x="171" y="220" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ggjl93eLX9xhSivgfc8k-18" value="定时更新缓存" style="text;html=1;strokeColor=#2D7600;fillColor=#60a917;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;sketch=0;fontColor=#ffffff;" vertex="1" parent="1">
-          <mxGeometry x="60" y="215" width="60" height="30" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
