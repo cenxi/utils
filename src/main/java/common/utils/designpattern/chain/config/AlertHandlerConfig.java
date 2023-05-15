@@ -19,7 +19,6 @@ public class AlertHandlerConfig {
      * @param bizPropHandler 报警数据业务属性装配处理器
      * @param dbStoreHandler 报警数据存储处理器
      * @param videoHandler 报警视频录像处理器
-     * @param unrepeatableHandler 报警去重处理器
      * @param alertPushHandler 报警页面推送处理器
      * @param videoLabelHandler 直播视频标签处理器(rect信息)
      * @param callbackHandler 报警回调处理器
@@ -30,7 +29,6 @@ public class AlertHandlerConfig {
             BizPropHandler bizPropHandler,
             DbStoreHandler dbStoreHandler,
             VideoHandler videoHandler,
-            UnrepeatableHandler unrepeatableHandler,
             AlertPushHandler alertPushHandler,
             VideoLabelHandler videoLabelHandler,
             CallbackHandler callbackHandler
@@ -38,7 +36,6 @@ public class AlertHandlerConfig {
         return AlertHandlerChain.builder()
                 .next(bizPropHandler)
                 .next(videoLabelHandler)
-                .next(unrepeatableHandler)
                 .next(dbStoreHandler)
 //                .next(videoHandler)
                 .next(alertPushHandler)

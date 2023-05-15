@@ -3,6 +3,7 @@ package common.utils.designpattern.chain.util;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Callable;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
+@Lazy
 public class LockUtil {
 
     private final RedissonClient lock;
