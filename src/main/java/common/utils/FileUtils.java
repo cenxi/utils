@@ -1,10 +1,16 @@
 package common.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ：fengxi
@@ -122,6 +128,21 @@ public class FileUtils {
             return path.substring(0, path.lastIndexOf("/"));
         }
         return path;
+    }
+
+    /**
+     * 设置java设置Linux文件的权限
+     * @param file 文件路径
+     * @param permissions 例如:rwxrwxrwx
+     */
+    public static void setFilePermissions(String file,String permissions) {
+
+        Set<PosixFilePermission> perms = PosixFilePermissions.fromString(permissions);
+        try {
+            Files.setPosixFilePermissions(Paths.get(file), perms);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
