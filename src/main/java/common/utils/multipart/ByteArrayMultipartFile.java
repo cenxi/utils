@@ -1,4 +1,4 @@
-package common.utils;
+package common.utils.multipart;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
