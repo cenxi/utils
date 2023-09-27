@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-27T07:28:35.253Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="teV1FazDQy3elq77tnpS" version="21.8.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-27T08:02:06.927Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="kt6snA7EnSqIyMRXE4tJ" version="21.8.2" type="github">
   <diagram id="Za0V6DKtKcFsV4YseQ1D" name="Page-1">
     <mxGraphModel dx="2022" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -16,6 +16,9 @@
         <mxCell id="w63ZVAK2N26ufAvk-T6t-2" value="数据元件定义" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="140" y="570" width="120" height="60" as="geometry" />
         </mxCell>
+        <mxCell id="w63ZVAK2N26ufAvk-T6t-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="w63ZVAK2N26ufAvk-T6t-3" target="w63ZVAK2N26ufAvk-T6t-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-3" value="数据元件生产" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="550" y="570" width="120" height="60" as="geometry" />
         </mxCell>
@@ -32,19 +35,19 @@
           <mxGeometry x="-420" y="989" width="1840" height="130" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-8" value="区块链节点" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
-          <mxGeometry x="225" y="1014" width="60" height="80" as="geometry" />
+          <mxGeometry x="-190" y="1030" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-9" value="区块链节点" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
-          <mxGeometry x="335" y="1014" width="60" height="80" as="geometry" />
+          <mxGeometry x="170" y="1030" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-10" value="区块链节点" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
-          <mxGeometry x="445" y="1014" width="60" height="80" as="geometry" />
+          <mxGeometry x="635" y="1030" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-11" value="区块链节点" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
-          <mxGeometry x="555" y="1014" width="60" height="80" as="geometry" />
+          <mxGeometry x="1040" y="1030" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-12" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;区块链服务&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="155" y="990" width="95" height="30" as="geometry" />
+          <mxGeometry x="367.5" y="1000" width="95" height="30" as="geometry" />
         </mxCell>
         <mxCell id="w63ZVAK2N26ufAvk-T6t-13" value="共识算法、互信上链" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;direction=south;notch=0;" vertex="1" parent="1">
           <mxGeometry x="380" y="880" width="70" height="110" as="geometry" />
