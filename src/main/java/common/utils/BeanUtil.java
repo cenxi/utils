@@ -42,6 +42,24 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
 		});
 		return list;
 	}
+
+	public static boolean isWrapperPrimitive(Object o) {
+		o.getClass().isPrimitive();
+		boolean isPrimitive = false;
+		try {
+			isPrimitive = ((Class) (o.getClass().getField("TYPE").get(null))).isPrimitive();
+		} catch (Exception e) {
+
+		}
+		return isPrimitive;
+	}
+
+	public static void main(String[] args) {
+		long l = 5;
+		System.out.println();
+		boolean b = isWrapperPrimitive(l);
+		System.out.println(b);
+	}
 	
 	
 
