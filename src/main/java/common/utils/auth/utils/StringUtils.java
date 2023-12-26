@@ -205,4 +205,24 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return path;
     }
+
+    /***
+     * 清除不可见unicode
+     * Unicode标准还定义了每个字符的性质，许多支持Unicode的程序能够通过\p{quality}来支持其中的一部分。
+     *
+     * 分类	等价表示法及描述
+     * \p{L}	字母
+     * \p{M}	不能单独出现，而必须与其它基本字符一起出现（重音符号、包围框、等等）的字符
+     * \p{Z}	用于表示分隔，但本身不可见的字符（各种空白字符）
+     * \p{S}	各种图形符号和字母符号
+     * \p{N}	任何数字字符
+     * \p{P}	标点字符
+     * \p{C}	匹配其它任何字符——很少用于正常字符
+     */
+    public static String cleanInvisibleUnicode(String source){
+        if(source.length()<1){
+            return source;
+        }
+        return source.replaceAll("\\p{C}", "");
+    }
 }
