@@ -26,7 +26,7 @@ else
     redis.call('zadd', key, now, uuid)
     -- 移除时间区间以外不用的数据，不然会导致zset过大
     redis.call('zremrangebyscore',key, 0, start)
-    redis.call("expire", key, now-start)
+    redis.call("expire", key, (now-start)/1000)
     return true
 end
 
