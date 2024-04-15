@@ -125,6 +125,7 @@ public class FileUtils {
         }
         if (path.contains("jar")) {
             path = path.substring(0, path.lastIndexOf("."));
+            path = path.substring(0, path.lastIndexOf("/"));
         }
         path = path.replace("file:", "");
         return path;
