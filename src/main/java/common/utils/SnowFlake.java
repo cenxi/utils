@@ -17,12 +17,10 @@ public class SnowFlake {
      */
     private final static long SEQUENCE_BIT = 10; //序列号占用的位数
     private final static long MACHINE_BIT = 6;  //机器标识占用的位数
-    private final static long DATACENTER_BIT = 5;//数据中心占用的位数
 
     /**
      * 每一部分的最大值
      */
-    //private final static long MAX_DATACENTER_NUM = -1L ^ (-1L << DATACENTER_BIT);
     private final static long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
     private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
 
@@ -33,17 +31,11 @@ public class SnowFlake {
     private final static long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
     private final static long TIMESTMP_LEFT = DATACENTER_LEFT;
 
-    //private long datacenterId;  //数据中心
-//		private long machineId;    //机器标识
     private static long machineId = 1L;    //机器标识
     private static long sequence = 0L; //序列号
     private static long lastStmp = -1L;//上一次时间戳
 
     public SnowFlake(long machineId) {
-//	        if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
-//	            throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
-//	        }
-//			machineId = 1;
         this.machineId = machineId;
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
             throw new IllegalArgumentException("machineId can't be greater than MAX_MACHINE_NUM or less than 0");
