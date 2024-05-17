@@ -39,7 +39,7 @@ public class SlidingWindow {
      * 判断行为是否被允许
      *
      * @param key           行为key
-     * @param period        限流周期
+     * @param period        限流周期(单位：秒)
      * @param maxCount      最大请求次数（滑动窗口大小）
      * @return
      */
