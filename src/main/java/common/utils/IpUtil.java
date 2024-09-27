@@ -4,11 +4,10 @@ import cn.hutool.core.util.ObjectUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -264,6 +263,39 @@ public class IpUtil {
             }
         }
         return ip;
+    }
+
+    /**
+     * 解析url中的ip和端口
+     * @param url
+     * @return
+     */
+    public static Map<String, Object> getIpPortByUrl(String url) {
+
+        Map<String, Object> res = new HashMap<>();
+        String host = "";
+        int port = 0;
+        try {
+            URI uri = new URI(url);
+//            System.out.println(uri.getHost());
+//            System.out.println(uri.getPort());
+//            System.out.printf(uri.getScheme());
+            host = uri.getHost();
+            if (uri.getPort() <= 0) {
+                if (uri.getScheme().equalsIgnoreCase("https")) {
+                    port = 443;
+                } else if (uri.getScheme().equalsIgnoreCase("http")) {
+                    port = 80;
+                }
+            } else {
+                port = uri.getPort();
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        res.put("host", host);
+        res.put("port", port);
+        return res;
     }
 
     public static void main(String[] args) {
