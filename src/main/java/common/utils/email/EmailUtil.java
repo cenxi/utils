@@ -24,7 +24,7 @@ import java.util.Properties;
 @Slf4j
 public final class EmailUtil {
 
-    public static final int PROXY_RETRY_TIMES = 3;
+    public static final int PROXY_RETRY_TIMES = 5;
 
     /**
      * 发邮件
