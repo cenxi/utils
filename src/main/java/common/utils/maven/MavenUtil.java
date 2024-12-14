@@ -16,6 +16,8 @@ import java.util.List;
 @Slf4j
 public class MavenUtil {
 
+    //todo 给sh文件加可执行权限
+
     public static int run(String pom, List<String> goals) {
         return run(pom, goals, (s) -> {
             log.info(s);
