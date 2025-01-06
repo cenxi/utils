@@ -20,6 +20,7 @@ public class ValidatorUtils {
     }
 
     /**
+     * 用于手动校验对象
      * 校验对象
      * @param object        待校验对象
      * @param groups        待校验的组
