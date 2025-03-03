@@ -13,7 +13,7 @@ public class JarUtil {
      * @return
      */
     public static String getJarDir() {
-        String path = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String path = JarUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         if (System.getProperty("os.name").contains("dows")) {
             path = path.substring(1, path.length());
         }
