@@ -115,23 +115,6 @@ public class FileUtils {
     }
 
     /**
-     * 获取当前jar包所在路径
-     * @return
-     */
-    public static String getJarDir() {
-        String path = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        if (System.getProperty("os.name").contains("dows")) {
-            path = path.substring(1, path.length());
-        }
-        if (path.contains("jar")) {
-            path = path.substring(0, path.lastIndexOf("."));
-            path = path.substring(0, path.lastIndexOf("/"));
-        }
-        path = path.replace("file:", "");
-        return path;
-    }
-
-    /**
      * 设置java设置Linux文件的权限
      * @param file 文件路径
      * @param permissions 例如:rwxrwxrwx
