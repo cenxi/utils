@@ -20,7 +20,7 @@ public class FinalShellPwd {
 
     public static void main(String[] args) throws Exception {
         // 加密后的密码
-        String s1 = "E2VCBhFLWUHG2utuYbNFh/bmRSqlR8FL";
+        String s1 = "Jx9bQAYsFmyVeJS1EB3VCQX2W4z6vSJK";
         String s2 = decode(s1);
         System.out.println("输入之前是：" + s1);
         System.out.println("破解之后是：" + s2);
