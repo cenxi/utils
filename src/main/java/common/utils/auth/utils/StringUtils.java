@@ -194,18 +194,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
     }
 
-    public static String getJarDir() {
-        String path = StringUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        if (System.getProperty("os.name").contains("dows")) {
-            path = path.substring(1, path.length());
-        }
-        if (path.contains("jar")) {
-            path = path.substring(0, path.lastIndexOf("."));
-            return path.substring(0, path.lastIndexOf("/"));
-        }
-        return path;
-    }
-
     /***
      * 清除不可见unicode
      * Unicode标准还定义了每个字符的性质，许多支持Unicode的程序能够通过\p{quality}来支持其中的一部分。
