@@ -20,8 +20,4 @@ public final class FormUtil {
         return new ByteArrayMultipartFile(DEFAULT_PARAM_NAME, fileName, DEFAULT_CONTENT_TYPE, file);
     }
 
-    public static MultipartFile generateMultipartFiles(String fileName, byte[] file){
-        return new ByteArrayMultipartFile(DEFAULT_ARRAY_PARAM_NAME, fileName, DEFAULT_CONTENT_TYPE, file);
-    }
-
 }
