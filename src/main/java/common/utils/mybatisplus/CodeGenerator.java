@@ -13,11 +13,11 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
 
-        String dbIp = "10.32.181.22";
-        String dbPort = "32238";
-        String dbName = "ds_trust";
-        String[] tables = new String[]{"evidence_storage"};
-        String basePackage = "com.example";
+        String dbIp = "10.32.181.44";
+        String dbPort = "32283";
+        String dbName = "ds_system";
+        String[] tables = new String[]{"service_catalog"};
+        String basePackage = "com.zgdz.ds.dorado.dao";
         IdType idType = IdType.ASSIGN_ID;
 
         String[] tablePrefix = new String[]{"tbl_"};
