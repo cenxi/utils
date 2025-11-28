@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 @ConditionalOnProperty(name = "callLog.dealType", havingValue = "memory")
 @Component
 @Slf4j
-public class MemMsgConsumer extends AbsMsgConsumer {
+public class MemMsgConsumer implements MsgConsumer {
 
     @Override
     public void registerGroups(String topic, String[] groups) {

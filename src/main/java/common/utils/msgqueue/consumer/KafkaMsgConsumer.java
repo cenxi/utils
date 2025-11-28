@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 @ConditionalOnProperty(name = "callLog.dealType", havingValue = "kafka")
 @Component
 @Slf4j
-public class KafkaMsgConsumer extends AbsMsgConsumer {
+public class KafkaMsgConsumer implements MsgConsumer {
 
     @Autowired
     ConsumerFactory consumerFactory;

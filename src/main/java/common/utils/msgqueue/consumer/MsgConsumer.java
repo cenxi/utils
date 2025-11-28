@@ -12,5 +12,5 @@ public interface MsgConsumer {
 
     default void registerGroups(String topic,String[] groups){}
 
-    void startConsume(String topic, String group, Consumer<String> logConsumer);
+    void consume(String topic, String group, Consumer<String> logConsumer);
 }

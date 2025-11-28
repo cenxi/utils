@@ -1,5 +1,6 @@
 package common.utils.msgqueue.test;
 
+import common.utils.msgqueue.anno.MsgListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TestLogHandler {
 
+    @MsgListener(topic = "test-topic")
     public void printLog(String msg) {
         log.info("打印日志->{}", msg);
     }

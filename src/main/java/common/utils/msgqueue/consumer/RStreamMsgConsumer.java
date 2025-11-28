@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 @ConditionalOnProperty(name = "callLog.dealType", havingValue = "redis", matchIfMissing = true)
 @Component
 @Slf4j
-public class RStreamMsgConsumer extends AbsMsgConsumer {
+public class RStreamMsgConsumer implements MsgConsumer {
 
     @Autowired
     RedisTemplate redisTemplate;

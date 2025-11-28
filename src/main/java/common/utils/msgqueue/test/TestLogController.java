@@ -2,7 +2,10 @@ package common.utils.msgqueue.test;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author fengxi
@@ -15,21 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class TestLogController {
 
     @Autowired
-    TestConsumerLog testConsumerLog;
-    @Autowired
     TestProduceLog testProduceLog;
 
     @PostMapping("/produce")
     public Object produce(@RequestBody Object o) {
         testProduceLog.produce(JSON.toJSONString(o));
 
-        return "";
-    }
-
-
-    @GetMapping("/consume")
-    public Object consume() {
-        testConsumerLog.consume();
         return "";
     }
 
