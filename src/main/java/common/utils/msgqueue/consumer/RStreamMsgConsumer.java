@@ -1,5 +1,6 @@
 package common.utils.msgqueue.consumer;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author fengxi
@@ -32,6 +35,11 @@ public class RStreamMsgConsumer implements MsgConsumer {
     public void consume(String topic, String group, Consumer<String> logConsumer) {
 
         consumeMessages(topic, group, group, logConsumer);
+    }
+
+    @Override
+    public void batchConsume(String topic, String group, int batchSize, Consumer<List<String>> logConsumer) {
+
     }
 
     /**
@@ -56,7 +64,7 @@ public class RStreamMsgConsumer implements MsgConsumer {
             List<MapRecord<String, String, String>> messages = redisTemplate.opsForStream()
                     .read(
                             org.springframework.data.redis.connection.stream.Consumer.from(groupName, consumerName),
-                            StreamReadOptions.empty().block(Duration.ofMillis(100)).count(10),
+                            StreamReadOptions.empty().block(Duration.ofMillis(500)).count(10),
                             StreamOffset.create(streamKey, ReadOffset.lastConsumed())
                     );
             if (messages != null && !messages.isEmpty()) {
@@ -72,6 +80,46 @@ public class RStreamMsgConsumer implements MsgConsumer {
                     } finally {
                         redisTemplate.opsForStream().acknowledge(groupName, message);
                     }
+                }
+            }
+            /*try {
+                TimeUnit.MILLISECONDS.sleep(500L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }*/
+        }
+    }
+
+    private void batchConsumeMessages(String streamKey, String groupName, String consumerName, int batchSize, Consumer<List<String>> logConsumer) {
+
+        try {
+            // 尝试创建消费者组（如果不存在）
+            redisTemplate.opsForStream().createGroup(streamKey, ReadOffset.from("0"), groupName);
+            log.info("Consumer group created: {},offset 0", groupName);
+        } catch (Exception e) {
+            // 忽略消费者组已存在的异常
+            log.info("Consumer group already exists: {},offset lastConsumed", groupName);
+        }
+        while (true) {
+            // 从 Redis Stream 中读取消息
+            List<MapRecord<String, String, String>> messages = redisTemplate.opsForStream()
+                    .read(
+                            org.springframework.data.redis.connection.stream.Consumer.from(groupName, consumerName),
+                            StreamReadOptions.empty().block(Duration.ofMillis(500)).count(batchSize),
+                            StreamOffset.create(streamKey, ReadOffset.lastConsumed())
+                    );
+            if (ObjectUtil.isNotEmpty(messages)) {
+                List<RecordId> recordIds = new ArrayList<>();
+                try {
+                    List<String> msgs = messages.stream()
+                            .map(t -> JSON.toJSONString(t.getValue()))
+                            .collect(Collectors.toList());
+                    logConsumer.accept(msgs);
+                    recordIds = messages.stream().map(MapRecord::getId).collect(Collectors.toList());
+                } catch (Exception e) {
+                    log.error("Error processing message: ", e);
+                } finally {
+                    redisTemplate.opsForStream().acknowledge(streamKey, groupName, recordIds.toArray(new RecordId[0]));
                 }
             }
         }

@@ -1,22 +1,20 @@
 package common.utils.msgqueue.init;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import common.utils.msgqueue.anno.MsgListener;
 import common.utils.msgqueue.consumer.MsgConsumer;
 import common.utils.msgqueue.dto.MsgListenerInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,13 +47,24 @@ public class MsgListenerScanner implements BeanPostProcessor, SmartInitializingS
                 String group = msgListener.group();
                 int concurrency = msgListener.concurrency();
                 boolean topicNameWithNacosSpace = msgListener.topicNameWithNacosSpace();
+                boolean batch = msgListener.batch();
+                if (batch) {
+                    Class<?>[] parameterTypes = method.getParameterTypes();
+                    if (parameterTypes.length != 1 || !parameterTypes[0].equals(List.class)) {
+                        log.error("批量消费模式下，方法 {}.{} 必须接收一个 List 类型的参数",
+                                method.getDeclaringClass().getName(),
+                                method.getName());
+                        continue;
+                    }
+                }
+                int batchSize = msgListener.batchSize();
 
                 if (topicNameWithNacosSpace) {
                     topic = topic + StrUtil.C_UNDERLINE + namespace;
                 }
                 // 将方法和 Bean 实例封装为 ListenerMethod 对象
                 listenerMethodsMap.computeIfAbsent(topic, k -> new ArrayList<>())
-                        .add(new MsgListenerInfo(bean, method, group, concurrency, topicNameWithNacosSpace));
+                        .add(new MsgListenerInfo(bean, method, group, concurrency, topicNameWithNacosSpace, batch, batchSize));
 
                 log.info("发现 @MsgListener 方法: {}, topic->{}, group->{}, concurrency->{}",
                         method.getName(), topic, group, concurrency);
@@ -93,25 +102,41 @@ public class MsgListenerScanner implements BeanPostProcessor, SmartInitializingS
             for (MsgListenerInfo msgListenerInfo : msgListenerInfos) {
                 String group = msgListenerInfo.getGroup();
                 int concurrency = msgListenerInfo.getConcurrency();
+                String threadKey = msgListenerInfo.getBean().getClass().getName() + "_" + group;
+                boolean batch = msgListenerInfo.isBatch();
+                int batchSize = msgListenerInfo.getBatchSize();
 
                 // 为每个消费者组创建固定大小的线程池
-                groupExecutorMap.computeIfAbsent(group, k -> Executors.newFixedThreadPool(concurrency));
+                groupExecutorMap.computeIfAbsent(threadKey, k -> Executors.newFixedThreadPool(concurrency));
 
                 // 提交消费任务到线程池
                 for (int i = 0; i < concurrency; i++) {
-                    groupExecutorMap.get(group).submit(() -> {
-                        msgConsumer.consume(topic, group, msg -> {
-                            try {
-                                log.info("调用监听方法处理消息, topic->{}, group->{}, concurrency->{}",
-                                        topic, group, concurrency);
-                                msgListenerInfo.getMethod().invoke(msgListenerInfo.getBean(), msg);
-                            } catch (Exception e) {
-                                log.error("消息处理失败", e);
-                            }
-                        });
+                    groupExecutorMap.get(threadKey).submit(() -> {
+                        if (!batch) {
+                            msgConsumer.consume(topic, group, msg -> {
+                                try {
+                                    log.info("调用监听方法处理消息, topic->{}, group->{}, concurrency->{}",
+                                            topic, group, concurrency);
+                                    msgListenerInfo.getMethod().invoke(msgListenerInfo.getBean(), msg);
+                                } catch (Exception e) {
+                                    log.error("消息处理失败", e);
+                                }
+                            });
+                        } else {
+                            msgConsumer.batchConsume(topic, group, batchSize, msgs -> {
+                                try {
+                                    log.info("调用监听方法处理消息, topic->{}, group->{}, concurrency->{}",
+                                            topic, group, concurrency);
+                                    msgListenerInfo.getMethod().invoke(msgListenerInfo.getBean(), msgs);
+                                } catch (Exception e) {
+                                    log.error("消息处理失败", e);
+                                }
+                            });
+                        }
                     });
                 }
             }
         }
+        log.info("注册MsgListener完成。注册的任务->{}", JSON.toJSONString(groupExecutorMap.keySet()));
     }
 }

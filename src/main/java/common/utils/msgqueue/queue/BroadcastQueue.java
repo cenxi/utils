@@ -1,5 +1,8 @@
 package common.utils.msgqueue.queue;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +19,7 @@ public class BroadcastQueue {
 
     // 每个消费者组的队列
     private final Map<String, BlockingQueue<String>> groupQueues = new ConcurrentHashMap<>();
-    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock( true);
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     // 注册消费者组
     public void registerGroup(String groupName) {
@@ -57,5 +60,23 @@ public class BroadcastQueue {
             Thread.currentThread().interrupt();
         }
         return null;
+    }
+
+    public List<String> batchConsume(String groupName, int batchSize) {
+        BlockingQueue<String> queue = groupQueues.get(groupName);
+        if (queue == null) {
+            throw new IllegalArgumentException("Consumer group not registered: " + groupName);
+        }
+
+        List<String> msgs = new ArrayList<>(batchSize);
+        try {
+            int drainedCount = queue.drainTo(msgs, batchSize);
+            if (drainedCount == 0){
+                return Collections.emptyList();
+            }
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+        return msgs;
     }
 }

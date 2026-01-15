@@ -16,4 +16,8 @@ public @interface MsgListener {
     int concurrency() default 1;
 
     boolean topicNameWithNacosSpace() default false;
+
+    boolean batch() default false;
+
+    int batchSize() default 100;
 }

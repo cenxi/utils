@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -40,6 +41,24 @@ public class MemMsgConsumer implements MsgConsumer {
             try {
                 String msg = queue.consume(group);
                 logConsumer.accept(msg);
+            } catch (Exception e) {
+                log.error("Error consuming message: ", e);
+            }
+        }
+    }
+
+    @Override
+    public void batchConsume(String topic, String group, int batchSize, Consumer<List<String>> logConsumer) {
+        BroadcastQueue queue = MultiTopicGroupQueue.getQueue(topic);
+        if (ObjectUtil.isNull(queue)) {
+            throw new RuntimeException("消费者组未初始化");
+        }
+        while (true) {
+            try {
+                List<String> msg = queue.batchConsume(group, batchSize);
+                if (ObjectUtil.isNotEmpty(msg)) {
+                    logConsumer.accept(msg);
+                }
             } catch (Exception e) {
                 log.error("Error consuming message: ", e);
             }

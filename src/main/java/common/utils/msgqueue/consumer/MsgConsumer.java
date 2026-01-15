@@ -1,5 +1,6 @@
 package common.utils.msgqueue.consumer;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -10,7 +11,10 @@ import java.util.function.Consumer;
  */
 public interface MsgConsumer {
 
-    default void registerGroups(String topic,String[] groups){}
+    default void registerGroups(String topic, String[] groups) {
+    }
 
     void consume(String topic, String group, Consumer<String> logConsumer);
+
+    void batchConsume(String topic, String group, int batchSize, Consumer<List<String>> logConsumer);
 }

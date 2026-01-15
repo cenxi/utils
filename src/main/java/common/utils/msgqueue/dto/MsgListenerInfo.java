@@ -2,6 +2,7 @@ package common.utils.msgqueue.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.lang.reflect.Method;
 
@@ -13,6 +14,7 @@ import java.lang.reflect.Method;
  */
 @AllArgsConstructor
 @Data
+@Accessors(chain = true)
 public class MsgListenerInfo {
 
     private Object bean;
@@ -24,4 +26,8 @@ public class MsgListenerInfo {
     private int concurrency;
 
     private boolean topicNameWithNacosSpace;
+
+    private boolean batch;
+
+    private int batchSize;
 }

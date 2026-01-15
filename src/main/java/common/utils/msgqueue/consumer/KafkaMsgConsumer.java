@@ -1,6 +1,8 @@
 package common.utils.msgqueue.consumer;
 
+import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -10,8 +12,10 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -42,9 +46,17 @@ public class KafkaMsgConsumer implements MsgConsumer {
         consumeWithCustomGroup(group, topic, logConsumer);
     }
 
+    @Override
+    public void batchConsume(String topic, String group, int batchSize, Consumer<List<String>> logConsumer) {
+        batchConsumeWithCustomGroup(group, topic, logConsumer, batchSize);
+    }
+
     private void consumeWithCustomGroup(String groupId, String topic, Consumer<String> logConsumer) {
+        Properties properties = new Properties();
+        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         // 只指定消费者组，不指定 clientId
-        KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) consumerFactory.createConsumer(groupId, null);
+        KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) consumerFactory
+                .createConsumer(groupId, null, null, properties);
         consumer.subscribe(Collections.singletonList(topic));
 
         while (true) {
@@ -52,6 +64,34 @@ public class KafkaMsgConsumer implements MsgConsumer {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
                     logConsumer.accept(record.value());
+                }
+            } catch (Exception e) {
+                log.error("Error consuming message: ", e);
+            } finally {
+                consumer.commitSync();
+            }
+        }
+    }
+
+    private void batchConsumeWithCustomGroup(String groupId, String topic, Consumer<List<String>> logConsumer, int batchSize) {
+        // 只指定消费者组，不指定 clientId
+        Properties properties = new Properties();
+        properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, batchSize);
+        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+
+        KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) consumerFactory
+                .createConsumer(groupId, null, null, properties);
+        consumer.subscribe(Collections.singletonList(topic));
+
+        while (true) {
+            try {
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+                if (ObjectUtil.isNotEmpty(records)) {
+                    List<String> msgs = new ArrayList<>();
+                    for (ConsumerRecord<String, String> record : records) {
+                        msgs.add(record.value());
+                    }
+                    logConsumer.accept(msgs);
                 }
             } catch (Exception e) {
                 log.error("Error consuming message: ", e);
